@@ -1,21 +1,142 @@
 Enable ( Modo Privilegiado)
-    Configure terminal (Modo de configuração Global)
-         Hostname sw-02( Alterar nome do switch)
-          Enable Secret 123@senac (senha Modo Privilegiado)
-             Username Senac Secret 123@senac (Usuario e senha de admin) 
-               Line console 0 (configuração de linha porta 0)
-                 Login Local (Habilitando a autenticção)
-                     Exit (Saindo da linha console)
-                 Exit(saindo do modo de configuração Global)
-                Copy running-config startup-config (salvando as configurações)
+Configure terminal (Modo de configuração Global)
+Hostname sw-02 ( Alterar nome do switch)
+Enable Secret 123@senac (senha Modo Privilegiado)
+Username Senac Secret 123@senac (Usuario e senha de admin) 
+Line console 0 (configuração de linha porta 0)
+Login Local (Habilitando a autenticção)
+Exit (Saindo da linha console)
+Exit(saindo do modo de configuração Global)
 
-                Enable ( Modo Privilegiado)
-    Configure terminal (Modo de configuração Global)
-         Hostname sw-02 ( Alterar nome do switch)
-          Enable Secret 123@senac (senha Modo Privilegiado)
-             Username Senac Secret 123@senac (Usuario e senha de admin) 
-               Line console 0 (configuração de linha porta 0)
-                 Login Local (Habilitando a autenticção)
-                     Exit (Saindo da linha console)
-                 Exit(saindo do modo de configuração Global)
-                Copy running-config startup-config (salvando as configurações)
+Copy running-config startup-config (salvando as configurações)
+!Configurar a Data e Hora do Switch               
+clock set 19:30:00 28 April 2022
+
+!Configuração do Hostname (Nome do equipamento)
+hostname sw-02                            
+!Habilitar criptografia de senha
+service password-encryption
+
+!Habilitar a marcação de data Hora no log
+service timestamps log datetime msec
+!Desativar a resolução de Nome
+
+no no ip domain-lookup
+!Configuração da mensagem do datetime
+banner motd #AVISO acesso autorizado somente a funcionarios#
+
+!Acessar a linha de console
+line console 0
+
+!Habilitando o login local
+login local
+
+!Habilitando o sincronismo dos logs
+logging synchronous
+
+!Habilitando o tempo de inatividade
+exec-timeout 5 30 
+
+!Sair de todos os Modos
+end ctrl z
+
+!Salavando as configurações do Switch
+copy runnig-config startup-config
+
+!Verificando as configurações do Switch
+show runnig-config
+
+
+\\\   !Configuração do endereço IP e do gateway ///
+Enable      
+configur terminal
+
+!Configurando o gateway no switch
+ip default-gateway 192.168.1.254
+
+!Configurando a VLAN 1  
+interface VLAN 1
+
+!configurar a descriçao da interface
+description interface de SVI do switch
+
+!configurar o endereço IPv4
+ip address 192.168.1.250 255.255.255.0
+
+!Habilitar a interface SVI
+no shutdown
+end
+write show running-config
+
+
+------------------------------------
+
+
+!Acessar o modo EXEC Privilegiado
+Enable
+
+    !Configurar a Data e Hora do Switch
+    clock set 19:30:00 28 April 2022
+
+    !Modo de configuração Global
+    configure terminal
+
+        !Configuração do Hostname (Nome do equipamento)
+        hostname sw-01
+
+        !Habilitar criptografia de senha
+        service password-encryption
+
+        !Habilitar a marcação de data Hora no log
+        service timestamps log datetime msec
+
+        !Desativar a resolução de Nome
+        no ip domain-lookup
+
+        !Configuração da mensagem do datetime
+        banner motd #AVISO acesso autorizado somente a funcionarios#
+
+        !Habilitar a senha do modo Enable
+        enable secret 123@senac
+
+        !Criar usuarios de administração do Switch
+        username: senac secret 123@senac
+
+        !Acessar a linha de console
+        line console 0
+
+        !Habilitando o login local
+        login local
+
+        !Habilitando o sincronismo dos logs
+        logging synchronous
+
+        !Habilitando o tempo de inatividade
+        exec-timeout 5 30 
+
+        !Sair de todos os Modos
+        end ctrl z
+
+        !Salavando as configurações do Switch
+        copy runnig-config startup-config
+
+        !Verificando as configurações do Switch
+        show runnig-config
+        ------------------------------------------------------------------------------------------------------------
+
+
+!Configuração do VTY (Terminais virtuais)
+enable
+  configur terminal
+
+  !Habilitando linhas virtuais
+  line vty 0 4
+  logging synchronous
+  exec-timeout 5 30
+
+!Habilitando o suporte aos protocolos
+transporte input all
+end
+
+!Salvando as configurações
+Write
