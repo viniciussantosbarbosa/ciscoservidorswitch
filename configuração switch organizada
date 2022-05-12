@@ -1,0 +1,102 @@
+
+!Configuração Base do Switch L2 2960 Segundo Cenário
+!OBSERVAÇÃO IMPORTANTE: ALTERAR O Hostname e SVI da VLAN 1 para cada
+!Switch do seu cenário
+
+!Acessar o modo EXEC Privilegiado
+enable
+
+    !Configurar a Data e Hora do Switch
+    clock set 19:30:00 10 May 2022
+
+    !Modo de Configuração Global
+    configure terminal
+
+        !Configuração do Hostname (Nome do Equipamento)
+        hostname sw-04
+
+        !Habilitar a Criptografia de Senha
+        service password-encryption
+
+        !Habilitar a Marcação de Data Hora no Log
+        service timestamps log datetime msec
+
+        !Desativar a Resolução de Nome
+        no ip domain-lookup
+
+        !Configuração da Mensagem do Dia
+        banner motd #AVISO acesso autorizado somente a funcionarios#
+
+        !Habilitando a senha do modo Enable
+        enable secret 123@senac
+
+        !Criar usuários de administração do Switch
+        username senac secret 123@senac
+
+        !Configurando o Gateway do Switch
+        ip default-gateway 192.168.3.254
+
+        !Configuração do Domínio do Router
+        ip domain-name senac.br
+
+        !Configuração do Serviço do SSH Server
+        crypto key generate rsa general-keys modulus 1024
+
+        !Configuração da Versão 2 do SSH
+        ip ssh version 2
+
+        !Acessar a Linha de Console
+        line console 0
+
+            !Habilitando o Login Local
+            login local
+
+            !Habilitando o sincronismo dos Logs
+            logging synchronous
+
+            !Habilitando o tempo de inatividade
+            exec-timeout 5 30
+
+            !Sair de todos os Modos
+            exit
+
+        !Habilitando as Linhas Virtuais
+        line vty 0 4
+
+            !Habilitando o Login Local
+            login local
+
+            !Habilitando o sincronismo dos Logs
+            logging synchronous
+
+            !Habilitando o tempo de inatividade
+            exec-timeout 5 30
+
+            !Sair de todos os Modos
+
+            !Habilitando o suporte aos Protocolos
+            transport input ssh
+            
+            !Sair de todos os Modos
+            exit
+
+        !Configurando a VLAN 1 SVI
+        interface vlan 1
+
+            !Configurar a descrição da interface
+            description Interface de SVI do Switch
+
+            !Configurar o Endereço IPv4
+            ip address 192.168.3.251 255.255.255.0
+
+            !Habilitar a Interface SVI
+            no shutdown
+
+            !Sair de todos os Modos
+            end
+
+    !Salvando as configurações do Switch
+    write
+
+    !Verificando as configurações do Switch
+    show running-config
